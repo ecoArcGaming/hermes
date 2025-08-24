@@ -5,6 +5,15 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo "--- Running Network Diagnostics ---"
+      - echo "1. Checking DNS server configuration:"
+      - cat /etc/resolv.conf
+      - echo "2. Performing DNS lookup with nslookup:"
+      - nslookup 677276120570.dkr.ecr.us-east-1.amazonaws.com
+      - echo "3. Testing outbound connectivity to Google's DNS:"
+      - nc -zv 8.8.8.8 53
+      - echo "--- End of Diagnostics ---"
+
       - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/iot-simulator
