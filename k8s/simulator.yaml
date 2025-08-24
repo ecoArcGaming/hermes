@@ -1,0 +1,20 @@
+# k8s/simulator.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: simulator
+  template:
+    metadata:
+      labels:
+        app: simulator
+    spec:
+      containers:
+      - name: simulator
+        image: 677276120570.dkr.ecr.us-east-1.amazonaws.com/monitor:latest
+        imagePullPolicy: Always

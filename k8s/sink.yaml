@@ -1,0 +1,34 @@
+# processor-sink-deployment.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: processor-sink-config
+data:
+  # IMPORTANT: Replace the value with your actual DATABASE_URL
+  DATABASE_URL: "postgres://postgres:YOUR_PASSWORD@your-rds-endpoint.us-east-1.rds.amazonaws.com:5432/postgres"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processor-sink
+  labels:
+    app: processor-sink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: processor-sink
+  template:
+    metadata:
+      labels:
+        app: processor-sink
+    spec:
+      containers:
+      - name: processor-sink
+        # IMPORTANT: Replace with your ECR image URI
+        image: 677276120570.dkr.ecr.us-east-1.amazonaws.com/processor-sink:latest
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: processor-sink-config
