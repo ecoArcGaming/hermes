@@ -4,8 +4,6 @@ version: 0.2
 
 phases:
   install:
-      runtime-versions:
-        docker: 18
       commands:
         # Install the 'nc' (netcat) utility
         - yum install -y nc
