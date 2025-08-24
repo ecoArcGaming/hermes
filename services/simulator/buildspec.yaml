@@ -1,44 +1,26 @@
-# services/simulator/buildspec.yml
+# services/iot-simulator/buildspec.yml
 
 version: 0.2
 
 phases:
-  install:
-      commands:
-        # Install the 'nc' (netcat) utility
-        - yum install -y nc
   pre_build:
     commands:
-      - echo "1. Backing up original DNS config"
-      - cp /etc/resolv.conf /etc/resolv.conf.backup
-      
-      - echo "2. Forcing container to use Google's DNS (8.8.8.8)"
-      - echo "nameserver 8.8.8.8" > /etc/resolv.conf
-      
-      - echo "3. Verifying new DNS config:"
-      - cat /etc/resolv.conf
-      - echo "--- Running Final Network Diagnostics ---"
-      - echo "1. Checking DNS server configuration:"
-      - cat /etc/resolv.conf
-      - echo "2. Performing DNS lookup with nslookup:"
-      - nslookup 677276120570.dkr.ecr.us-east-1.amazonaws.com
-      - echo "3. Testing outbound HTTPS connectivity to ECR:"
-      - nc -zv 677276120570.dkr.ecr.us-east-1.amazonaws.com 443
-      - echo "--- End of Diagnostics ---"
-
+      - echo Logging in to Amazon ECR...
       - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/iot-simulator
-      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
     commands:
+      - echo Build started on `date`
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION/health-monitoring-app
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
       - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:latest
 
   post_build:
     commands:
+      - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - docker push $REPOSITORY_URI:latest
