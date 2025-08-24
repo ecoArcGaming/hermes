@@ -33,7 +33,7 @@ func simulateDevice(deviceID string, p *kafka.Producer, wg *sync.WaitGroup) {
 			deviceID, heartRate, time.Now().Unix())
 
 		// to the Kafka topic
-		topicName := topic // Create a variable to take address of
+		topicName := topic 
 		p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topicName, Partition: kafka.PartitionAny},
 			Value:          []byte(message),
