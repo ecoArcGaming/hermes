@@ -9,13 +9,13 @@ phases:
         - yum install -y nc
   pre_build:
     commands:
-      - echo "--- Running Network Diagnostics ---"
+      - echo "--- Running Final Network Diagnostics ---"
       - echo "1. Checking DNS server configuration:"
       - cat /etc/resolv.conf
       - echo "2. Performing DNS lookup with nslookup:"
       - nslookup 677276120570.dkr.ecr.us-east-1.amazonaws.com
-      - echo "3. Testing outbound connectivity to Google's DNS:"
-      - nc -zv 8.8.8.8 53
+      - echo "3. Testing outbound HTTPS connectivity to ECR:"
+      - nc -zv 677276120570.dkr.ecr.us-east-1.amazonaws.com 443
       - echo "--- End of Diagnostics ---"
 
       - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
