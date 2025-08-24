@@ -9,6 +9,14 @@ phases:
         - yum install -y nc
   pre_build:
     commands:
+      - echo "1. Backing up original DNS config"
+      - cp /etc/resolv.conf /etc/resolv.conf.backup
+      
+      - echo "2. Forcing container to use Google's DNS (8.8.8.8)"
+      - echo "nameserver 8.8.8.8" > /etc/resolv.conf
+      
+      - echo "3. Verifying new DNS config:"
+      - cat /etc/resolv.conf
       - echo "--- Running Final Network Diagnostics ---"
       - echo "1. Checking DNS server configuration:"
       - cat /etc/resolv.conf
