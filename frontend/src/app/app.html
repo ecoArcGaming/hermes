@@ -1,19 +1,146 @@
-<div style="padding: 2rem;">
-  <h1>{{ title }}</h1>
+<!-- Header Toolbar -->
+<mat-toolbar color="primary" class="app-toolbar">
+  <mat-icon>monitor_heart</mat-icon>
+  <span class="toolbar-title">{{ title }}</span>
+  <span class="spacer"></span>
+  <button mat-icon-button>
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
 
-  <h2>Recent Alerts</h2>
-  
-  <div *ngIf="isLoading">
-    <p>Loading alerts...</p>
-  </div>
-  
-  <div *ngIf="!isLoading && alerts.length === 0">
-    <p>No alerts to display.</p>
-  </div>
+<!-- Main Content -->
+<div class="app-container">
+  <!-- Stats Overview Card -->
+  <mat-card class="stats-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>analytics</mat-icon>
+        Overview
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">{{ alerts.length }}</div>
+          <div class="stat-label">Total Alerts</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ isLoading ? '...' : (alerts.length > 0 ? 'Active' : 'Clear') }}</div>
+          <div class="stat-label">Status</div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-  <ul *ngIf="!isLoading && alerts.length > 0">
-    <li *ngFor="let alert of alerts">
-      Device: {{ alert.deviceId }} | Heart Rate: {{ alert.heartRate }} | Time: {{ alert.timestamp | date:'short' }}
-    </li>
-  </ul>
+  <!-- Main Content Grid: Alerts (Left) and Chart (Right) -->
+  <div class="content-grid">
+    <!-- Recent Alerts Card (Left Side) -->
+  <mat-card class="alerts-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>notifications</mat-icon>
+        Recent Alerts
+      </mat-card-title>
+      <mat-card-subtitle>Latest health monitoring alerts</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p class="loading-text">Loading alerts...</p>
+      </div>
+      
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && alerts.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">check_circle</mat-icon>
+        <h3>All Clear</h3>
+        <p>No alerts to display at this time.</p>
+      </div>
+
+      <!-- Alerts List -->
+      <div *ngIf="!isLoading && alerts.length > 0" class="alerts-list">
+        <mat-card *ngFor="let alert of alerts; trackBy: trackByDeviceId" class="alert-card">
+          <mat-card-content>
+            <div class="alert-header">
+              <mat-chip-set>
+                <mat-chip color="warn" selected>
+                  <mat-icon matChipAvatar>device_hub</mat-icon>
+                  {{ alert.deviceId }}
+                </mat-chip>
+              </mat-chip-set>
+              <span class="alert-time">{{ alert.timestamp | timestamp | date:'mediumTime' }}</span>
+            </div>
+            
+            <mat-divider></mat-divider>
+            
+            <div class="alert-details">
+              <div class="heart-rate">
+                <mat-icon color="warn">favorite</mat-icon>
+                <span class="heart-rate-value">{{ alert.heartRate }}</span>
+                <span class="heart-rate-unit">BPM</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+    <!-- Device Chart Card (Right Side) -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>timeline</mat-icon>
+          Device History
+        </mat-card-title>
+        <mat-card-subtitle>Heart rate readings over time</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <!-- Device Selection -->
+        <mat-form-field class="device-selector" appearance="outline">
+          <mat-label>Select Device</mat-label>
+          <input 
+            matInput 
+            [matAutocomplete]="auto" 
+            [(ngModel)]="selectedDeviceId"
+            (input)="filterDeviceIds($any($event.target).value)"
+            placeholder="Search for a device...">
+          <mat-icon matSuffix>search</mat-icon>
+          <mat-autocomplete 
+            #auto="matAutocomplete" 
+            (optionSelected)="onDeviceSelected($event.option.value)">
+            <mat-option *ngFor="let deviceId of filteredDeviceIds" [value]="deviceId">
+              <mat-icon>device_hub</mat-icon>
+              <span class="device-option">{{ deviceId }}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Chart Loading State -->
+        <div *ngIf="isLoadingChart" class="chart-loading">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading chart data...</p>
+        </div>
+
+        <!-- Chart Display -->
+        <div *ngIf="chartData && !isLoadingChart" class="chart-container">
+          <canvas 
+            baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            type="line">
+          </canvas>
+        </div>
+
+        <!-- No Device Selected -->
+        <div *ngIf="!selectedDeviceId && !isLoadingChart" class="no-device-selected">
+          <mat-icon class="large-icon">timeline</mat-icon>
+          <h3>Select a Device</h3>
+          <p>Choose a device from the dropdown above to view its heart rate history.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

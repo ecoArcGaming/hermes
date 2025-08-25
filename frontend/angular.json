@@ -25,6 +25,7 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "server": "src/main.server.ts",
@@ -59,6 +60,7 @@
         },
         "serve": {
           "options": {
+            "proxyConfig": "proxy.conf.json",
             "prebundle": {
               "exclude": [
                 "google-protobuf",

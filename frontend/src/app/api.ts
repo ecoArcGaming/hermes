@@ -2,7 +2,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HealthServiceClient } from './proto/HealthServiceClientPb';
-import { GetAlertsRequest, Alert } from './proto/health_pb';
+import { GetAlertsRequest, Alert, GetDeviceHistoryRequest, HealthDataPoint } from './proto/health_pb';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +37,38 @@ export class ApiService {
             reject(new Error("No response received"));
         }
       });
+    });
+  }
+
+  getDeviceHistory(deviceId: string): Promise<HealthDataPoint.AsObject[]> {
+    return new Promise((resolve, reject) => {
+      // If running on server, return empty array
+      if (!this.client) {
+        resolve([]);
+        return;
+      }
+
+      const request = new GetDeviceHistoryRequest();
+      request.setDeviceId(deviceId);
+      
+      this.client.getDeviceHistory(request, {}, (err, response) => {
+        if (err) {
+          return reject(err);
+        }
+        if (response) {
+            resolve(response.toObject().dataPointsList);
+        } else {
+            reject(new Error("No response received"));
+        }
+      });
+    });
+  }
+
+  // Get unique device IDs from alerts for the dropdown
+  getUniqueDeviceIds(): Promise<string[]> {
+    return this.getAlerts().then(alerts => {
+      const deviceIds = alerts.map(alert => alert.deviceId).filter(Boolean);
+      return [...new Set(deviceIds)].sort();
     });
   }
 }

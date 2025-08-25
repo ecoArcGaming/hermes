@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Angular Material Core Styles */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Custom Material Design Variables */
+:root {
+  --mdc-theme-primary: #3f51b5;
+  --mdc-theme-secondary: #e91e63;
+  --mdc-theme-error: #f44336;
+  --mdc-theme-surface: #ffffff;
+  --mdc-theme-background: #fafafa;
+  --mdc-theme-on-primary: #ffffff;
+  --mdc-theme-on-secondary: #ffffff;
+  --mdc-theme-on-error: #ffffff;
+  --mdc-theme-on-surface: rgba(0, 0, 0, 0.87);
+  --mdc-theme-on-background: rgba(0, 0, 0, 0.87);
+}
+
+/* Global styles */
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  background-color: var(--mdc-theme-background);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

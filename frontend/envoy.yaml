@@ -55,6 +55,6 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                # This must point to your gRPC service inside the EKS cluster
-                address: api-server-service.default.svc.cluster.local
+                # Point to the local port-forwarded gRPC service
+                address: host.docker.internal
                 port_value: 9090
