@@ -33,12 +33,10 @@
     "@angular/platform-server": "^20.2.0",
     "@angular/router": "^20.2.0",
     "@angular/ssr": "^20.2.0",
-    "@types/chart.js": "^2.9.41",
     "chart.js": "^4.5.0",
     "express": "^5.1.0",
     "google-protobuf": "^4.0.0",
     "grpc-web": "^1.5.0",
-    "ng2-charts": "^8.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

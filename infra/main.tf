@@ -1,6 +1,6 @@
 # main.tf
 
-# Configure AWS
+# Configure AWS, this file is not actually complete, just a template to reference in the future 
 provider "aws" {
   region = "us-east-1"
 }

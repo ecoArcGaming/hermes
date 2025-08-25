@@ -1,9 +1,1 @@
-{
-    "/grpc.health.v1.HealthService/*": {
-      "target": "http://localhost:8080",
-      "secure": false,
-      "logLevel": "debug",
-      "changeOrigin": true,
-      "ws": false
-    }
-  }
+{}

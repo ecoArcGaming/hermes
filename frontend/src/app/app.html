@@ -124,14 +124,23 @@
           <p>Loading chart data...</p>
         </div>
 
-        <!-- Chart Display -->
-        <div *ngIf="chartData && !isLoadingChart" class="chart-container">
-          <canvas 
-            baseChart
-            [data]="chartData"
-            [options]="chartOptions"
-            type="line">
-          </canvas>
+        <!-- Chart Display (only load when needed) -->
+        <div *ngIf="showChart && !isLoadingChart && chartDataPoints.length > 0" class="chart-container">
+          <div class="chart-placeholder">
+            <canvas 
+              #chartCanvas
+              width="800" 
+              height="400"
+              style="max-width: 100%; height: 400px;">
+            </canvas>
+          </div>
+        </div>
+
+        <!-- No Data State -->
+        <div *ngIf="showChart && !isLoadingChart && chartDataPoints.length === 0" class="no-data">
+          <mat-icon class="large-icon">bar_chart</mat-icon>
+          <h3>No Data Available</h3>
+          <p>No heart rate data found for the selected device.</p>
         </div>
 
         <!-- No Device Selected -->

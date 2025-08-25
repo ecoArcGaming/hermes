@@ -13,8 +13,8 @@ export class ApiService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     // Only initialize the client when running in the browser
     if (isPlatformBrowser(this.platformId)) {
-      // The client points to the Envoy proxy
-      this.client = new HealthServiceClient('http://localhost:8080');
+      // The client points to the Envoy proxy through Angular's dev server proxy
+      this.client = new HealthServiceClient('');
     }
   }
 
