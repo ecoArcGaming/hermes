@@ -1,0 +1,47 @@
+# api-deployment.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-server-config
+data:
+  DATABASE_URL: "Placeholder"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-server
+  labels:
+    app: api-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-server
+  template:
+    metadata:
+      labels:
+        app: api-server
+    spec:
+      containers:
+      - name: api-server
+        image: 677276120570.dkr.ecr.us-east-1.amazonaws.com/api-server:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9090
+        envFrom:
+        - configMapRef:
+            name: api-server-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-server-service
+spec:
+  selector:
+    app: api-server
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP

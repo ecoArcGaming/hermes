@@ -5,8 +5,7 @@ kind: ConfigMap
 metadata:
   name: processor-sink-config
 data:
-  # IMPORTANT: Replace the value with your actual DATABASE_URL
-  DATABASE_URL: "postgres://postgres:YOUR_PASSWORD@your-rds-endpoint.us-east-1.rds.amazonaws.com:5432/postgres"
+  DATABASE_URL: "Placeholder"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -27,7 +26,7 @@ spec:
       containers:
       - name: processor-sink
         # IMPORTANT: Replace with your ECR image URI
-        image: 677276120570.dkr.ecr.us-east-1.amazonaws.com/processor-sink:latest
+        image: 677276120570.dkr.ecr.us-east-1.amazonaws.com/alert:latest
         imagePullPolicy: Always
         envFrom:
         - configMapRef:

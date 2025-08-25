@@ -23,7 +23,7 @@ type HealthData struct {
 }
 
 func main() {
-	// Connect to the TimescaleDB database.
+	// Connect to the  database.
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
 		log.Fatal("DATABASE_URL environment variable is not set")
@@ -33,7 +33,7 @@ func main() {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
 	defer dbpool.Close()
-	log.Println("Successfully connected to TimescaleDB.")
+	log.Println("Successfully connected to DB.")
 
 	// Set up the Kafka consumer.
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
