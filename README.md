@@ -2,7 +2,7 @@
 
 Hermes is a real-time IoT health monitoring platform that simulates, processes, and visualizes health data from a large scale of sensors. The system is a modern microservices architecture with event streaming and time-series data management.
 
-Demo [Here](http://a323ffbf242184b2d9edec29f1f20eff-1963567501.us-east-1.elb.amazonaws.com)
+Web demo [Here](hermeshealth.org)
 
 ## Architecture Overview
 
