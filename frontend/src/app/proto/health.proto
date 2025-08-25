@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package health;
+
+import "google/protobuf/timestamp.proto";
+
+// Go package name
+option go_package = "./health";
+
+// query health data.
+service HealthService {
+  //  recent alerts.
+  rpc GetAlerts(GetAlertsRequest) returns (GetAlertsResponse);
+
+  // a specific device.
+  rpc GetDeviceHistory(GetDeviceHistoryRequest) returns (GetDeviceHistoryResponse);
+}
+
+// Represents a single alert record.
+message Alert {
+  string device_id = 1;
+  int32 heart_rate = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// Represents a single historical data point for a device.
+message HealthDataPoint {
+  google.protobuf.Timestamp timestamp = 1;
+  int32 heart_rate = 2;
+}
+
+// Request message for GetAlerts RPC. (Empty for now, could add filters later)
+message GetAlertsRequest {}
+
+// Response message for GetAlerts RPC.
+message GetAlertsResponse {
+  repeated Alert alerts = 1;
+}
+
+// Request message for GetDeviceHistory RPC.
+message GetDeviceHistoryRequest {
+  string device_id = 1;
+}
+
+// Response message for GetDeviceHistory RPC.
+message GetDeviceHistoryResponse {
+  repeated HealthDataPoint data_points = 1;
+}

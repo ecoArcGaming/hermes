@@ -58,6 +58,14 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "prebundle": {
+              "exclude": [
+                "google-protobuf",
+                "google-protobuf/google/protobuf/any_pb.js"
+              ]
+            }
+          },
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
